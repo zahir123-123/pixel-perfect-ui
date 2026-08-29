@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   ArrowLeft,
   Calendar,
@@ -9,6 +10,7 @@ import {
   BadgeCheck,
   School,
   ChevronRight,
+  ChevronDown,
   ClipboardCopy,
   ReceiptText,
   CreditCard,
@@ -20,6 +22,8 @@ import {
   Wallet,
   BookOpen,
   Maximize2,
+  Download,
+  FileText,
 } from "lucide-react";
 import avatar from "@/assets/student-avatar.jpg";
 
@@ -52,12 +56,15 @@ function InfoField({ label, value }: { label: string; value: string }) {
   );
 }
 
+type DocOption = { name: string; meta: string };
+
 function DocRow({
   icon,
   iconClass,
   title,
   subtitle,
   highlight,
+  options,
   children,
 }: {
   icon: React.ReactNode;
@@ -65,36 +72,79 @@ function DocRow({
   title: string;
   subtitle: string;
   highlight?: boolean;
+  options: DocOption[];
   children?: React.ReactNode;
 }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <button
-      className={`flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition-colors ${
-        highlight
-          ? "border-primary/25 bg-primary-soft/60"
-          : "border-border bg-card hover:bg-muted/50"
+    <div
+      className={`overflow-hidden rounded-2xl border transition-colors ${
+        highlight ? "border-primary/25 bg-primary-soft/60" : "border-border bg-card"
       }`}
     >
-      <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${iconClass}`}>
-        {icon}
-      </span>
-      <span className="min-w-0 flex-1">
-        <span
-          className={`block text-[15px] font-semibold ${highlight ? "text-primary" : "text-foreground"}`}
-        >
-          {title}
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 px-3 py-3 text-left hover:bg-muted/40"
+      >
+        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${iconClass}`}>
+          {icon}
         </span>
-        <span className="block text-[12px] text-muted-foreground">{subtitle}</span>
-        {children}
-      </span>
-      <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground" />
-    </button>
+        <span className="min-w-0 flex-1">
+          <span
+            className={`block text-[15px] font-semibold ${highlight ? "text-primary" : "text-foreground"}`}
+          >
+            {title}
+          </span>
+          <span className="block text-[12px] text-muted-foreground">{subtitle}</span>
+          {children}
+        </span>
+        <ChevronDown
+          className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-300 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      <div
+        className={`grid transition-all duration-300 ease-in-out ${
+          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <ul className="space-y-1.5 border-t border-border/60 px-3 py-2.5">
+            {options.map((opt) => (
+              <li
+                key={opt.name}
+                className="flex items-center gap-2.5 rounded-xl bg-muted/50 px-2.5 py-2"
+              >
+                <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[13px] font-medium text-foreground">
+                    {opt.name}
+                  </span>
+                  <span className="block text-[11px] text-muted-foreground">{opt.meta}</span>
+                </span>
+                <button
+                  aria-label={`Download ${opt.name}`}
+                  className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform active:scale-95"
+                >
+                  <Download className="h-4 w-4" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 }
 
 function Index() {
   return (
-    <main className="min-h-screen bg-background pb-28">
+    <main className="min-h-screen bg-background pb-28 sm:py-6">
+      <div className="mx-auto w-full max-w-md overflow-hidden sm:rounded-[2rem] sm:shadow-card">
       {/* Header */}
       <header className="relative bg-primary pb-20 pt-4">
         <div className="flex items-center px-4">
@@ -113,39 +163,42 @@ function Index() {
       <div className="relative z-10 -mt-14 space-y-4 px-4">
         {/* Identity card */}
         <section className="rounded-3xl bg-card p-4 shadow-card">
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-3">
             <img
               src={avatar}
               alt="Portrait of Kadali Chetan Kiran"
               width={512}
               height={512}
-              className="h-[72px] w-[72px] shrink-0 rounded-full border-4 border-primary-soft object-cover"
+              className="h-[64px] w-[64px] shrink-0 rounded-full border-4 border-primary-soft object-cover"
             />
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
-                <span className="rounded-md bg-primary-soft px-2 py-0.5 text-[9px] font-bold text-primary">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="rounded-md bg-primary-soft px-1.5 py-0.5 text-[9px] font-bold text-primary">
                   MEMBER ID
                 </span>
-                <span className="text-[13px] font-semibold text-foreground">2601100196</span>
+                <span className="text-[12.5px] font-semibold text-foreground">2601100196</span>
               </div>
-              <h2 className="mt-1 text-[17px] font-extrabold leading-tight text-foreground">
+              <h2 className="mt-1 text-[15px] font-extrabold leading-tight text-foreground">
                 KADALI CHETAN KIRAN
               </h2>
-              <p className="mt-1 text-[14px] text-muted-foreground">
+              <p className="mt-1 text-[12.5px] text-muted-foreground">
                 F.Y.B.COM (NEP) &nbsp;•&nbsp; Roll 0021
               </p>
             </div>
-            <button className="shrink-0 rounded-2xl border border-border bg-card p-2 text-center">
-              <img
-                src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=2601100196"
-                alt="Student QR code"
-                loading="lazy"
-                width={76}
-                height={76}
-                className="h-[76px] w-[76px]"
-              />
-              <span className="mt-1 flex items-center justify-center gap-1 text-[11px] text-muted-foreground">
-                Tap to view full QR <Maximize2 className="h-3 w-3" />
+            <button className="shrink-0 rounded-2xl border border-border bg-card p-1.5 text-center">
+              <span className="relative block overflow-hidden rounded-md">
+                <img
+                  src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=2601100196"
+                  alt="Student QR code"
+                  loading="lazy"
+                  width={72}
+                  height={72}
+                  className="h-[72px] w-[72px]"
+                />
+                <span aria-hidden className="qr-scan-line" />
+              </span>
+              <span className="mt-1 flex items-center justify-center gap-1 text-[10px] text-muted-foreground">
+                View full QR <Maximize2 className="h-3 w-3" />
               </span>
             </button>
           </div>
@@ -269,12 +322,22 @@ function Index() {
               iconClass="bg-violet-soft"
               title="Admission Forms"
               subtitle="Download submitted admission forms for all classes"
+              options={[
+                { name: "F.Y.B.COM Admission Form 2026-27", meta: "PDF • 1.2 MB" },
+                { name: "Eligibility Form", meta: "PDF • 480 KB" },
+                { name: "Anti-Ragging Undertaking", meta: "PDF • 210 KB" },
+              ]}
             />
             <DocRow
               icon={<ReceiptText className="h-4.5 w-4.5 text-success" />}
               iconClass="bg-success-soft"
               title="Institute Receipts"
               subtitle="Download receipts for admission, fees, fines, exam & more"
+              options={[
+                { name: "Admission Fee Receipt", meta: "Receipt #RC-1042 • PDF" },
+                { name: "Tuition Fee Receipt — Term 1", meta: "Receipt #RC-1187 • PDF" },
+                { name: "Exam Form Fee Receipt", meta: "Receipt #RC-1290 • PDF" },
+              ]}
             />
             <DocRow
               icon={<CreditCard className="h-4.5 w-4.5 text-primary-foreground" />}
@@ -282,6 +345,11 @@ function Index() {
               title="Payment Acknowledgements"
               subtitle="View and download online payment acknowledgements"
               highlight
+              options={[
+                { name: "Online Payment — TXN903412", meta: "Success • 12 Aug 2026" },
+                { name: "Online Payment — TXN903508", meta: "Failed • 12 Aug 2026" },
+                { name: "Refund Acknowledgement — RF102", meta: "Refunded • 15 Aug 2026" },
+              ]}
             >
               <span className="mt-2 flex flex-wrap gap-1.5">
                 <span className="rounded-md bg-success-soft px-2 py-0.5 text-[11px] font-medium text-success">
@@ -330,6 +398,7 @@ function Index() {
           <LogOut className="h-5 w-5 text-destructive" />
           <span className="text-[14px] font-semibold text-destructive">Sign Out</span>
         </button>
+      </div>
       </div>
 
       {/* Bottom nav */}
