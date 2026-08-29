@@ -322,12 +322,22 @@ function Index() {
               iconClass="bg-violet-soft"
               title="Admission Forms"
               subtitle="Download submitted admission forms for all classes"
+              options={[
+                { name: "F.Y.B.COM Admission Form 2026-27", meta: "PDF • 1.2 MB" },
+                { name: "Eligibility Form", meta: "PDF • 480 KB" },
+                { name: "Anti-Ragging Undertaking", meta: "PDF • 210 KB" },
+              ]}
             />
             <DocRow
               icon={<ReceiptText className="h-4.5 w-4.5 text-success" />}
               iconClass="bg-success-soft"
               title="Institute Receipts"
               subtitle="Download receipts for admission, fees, fines, exam & more"
+              options={[
+                { name: "Admission Fee Receipt", meta: "Receipt #RC-1042 • PDF" },
+                { name: "Tuition Fee Receipt — Term 1", meta: "Receipt #RC-1187 • PDF" },
+                { name: "Exam Form Fee Receipt", meta: "Receipt #RC-1290 • PDF" },
+              ]}
             />
             <DocRow
               icon={<CreditCard className="h-4.5 w-4.5 text-primary-foreground" />}
@@ -335,6 +345,11 @@ function Index() {
               title="Payment Acknowledgements"
               subtitle="View and download online payment acknowledgements"
               highlight
+              options={[
+                { name: "Online Payment — TXN903412", meta: "Success • 12 Aug 2026" },
+                { name: "Online Payment — TXN903508", meta: "Failed • 12 Aug 2026" },
+                { name: "Refund Acknowledgement — RF102", meta: "Refunded • 15 Aug 2026" },
+              ]}
             >
               <span className="mt-2 flex flex-wrap gap-1.5">
                 <span className="rounded-md bg-success-soft px-2 py-0.5 text-[11px] font-medium text-success">
@@ -383,6 +398,7 @@ function Index() {
           <LogOut className="h-5 w-5 text-destructive" />
           <span className="text-[14px] font-semibold text-destructive">Sign Out</span>
         </button>
+      </div>
       </div>
 
       {/* Bottom nav */}
