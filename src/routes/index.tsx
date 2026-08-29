@@ -47,7 +47,7 @@ function InfoField({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-border bg-muted/40 px-3 py-2">
       <p className="text-[11px] text-muted-foreground">{label}</p>
-      <p className="mt-0.5 truncate text-[15px] font-semibold text-foreground">{value}</p>
+      <p className="mt-0.5 truncate text-[13.5px] font-semibold text-foreground">{value}</p>
     </div>
   );
 }
@@ -96,7 +96,7 @@ function Index() {
   return (
     <main className="min-h-screen bg-background pb-28">
       {/* Header */}
-      <header className="relative bg-primary pb-24 pt-4">
+      <header className="relative bg-primary pb-20 pt-4">
         <div className="flex items-center px-4">
           <button
             aria-label="Go back"
@@ -110,7 +110,7 @@ function Index() {
         </div>
       </header>
 
-      <div className="relative z-10 -mt-20 space-y-4 px-4">
+      <div className="relative z-10 -mt-14 space-y-4 px-4">
         {/* Identity card */}
         <section className="rounded-3xl bg-card p-4 shadow-card">
           <div className="flex items-start gap-4">
@@ -119,16 +119,16 @@ function Index() {
               alt="Portrait of Kadali Chetan Kiran"
               width={512}
               height={512}
-              className="h-[86px] w-[86px] shrink-0 rounded-full border-4 border-primary-soft object-cover"
+              className="h-[72px] w-[72px] shrink-0 rounded-full border-4 border-primary-soft object-cover"
             />
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <span className="rounded-md bg-primary-soft px-2 py-0.5 text-[10px] font-bold tracking-wide text-primary">
+                <span className="rounded-md bg-primary-soft px-2 py-0.5 text-[9px] font-bold text-primary">
                   MEMBER ID
                 </span>
-                <span className="text-[14px] font-semibold text-foreground">2601100196</span>
+                <span className="text-[13px] font-semibold text-foreground">2601100196</span>
               </div>
-              <h2 className="mt-1 text-[21px] font-extrabold leading-tight text-foreground">
+              <h2 className="mt-1 text-[17px] font-extrabold leading-tight text-foreground">
                 KADALI CHETAN KIRAN
               </h2>
               <p className="mt-1 text-[14px] text-muted-foreground">
@@ -140,9 +140,9 @@ function Index() {
                 src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=2601100196"
                 alt="Student QR code"
                 loading="lazy"
-                width={92}
-                height={92}
-                className="h-[92px] w-[92px]"
+                width={76}
+                height={76}
+                className="h-[76px] w-[76px]"
               />
               <span className="mt-1 flex items-center justify-center gap-1 text-[11px] text-muted-foreground">
                 Tap to view full QR <Maximize2 className="h-3 w-3" />
@@ -176,7 +176,7 @@ function Index() {
                 <span className="grid h-7 w-7 place-items-center rounded-lg bg-primary-soft">
                   <CalendarCheck className="h-4 w-4 text-primary" />
                 </span>
-                <span className="text-[10px] font-semibold tracking-wide text-muted-foreground">
+                <span className="text-[9px] font-semibold text-muted-foreground">
                   ATTENDANCE
                 </span>
               </div>
@@ -189,7 +189,7 @@ function Index() {
                 <span className="grid h-7 w-7 place-items-center rounded-lg bg-destructive">
                   <ClipboardList className="h-4 w-4 text-destructive-foreground" />
                 </span>
-                <span className="text-[10px] font-semibold tracking-wide text-muted-foreground">
+                <span className="text-[9px] font-semibold text-muted-foreground">
                   FEES STATUS
                 </span>
               </div>
@@ -204,7 +204,7 @@ function Index() {
                 <span className="grid h-7 w-7 place-items-center rounded-lg bg-success">
                   <BadgeCheck className="h-4 w-4 text-success-foreground" />
                 </span>
-                <span className="text-[10px] font-semibold tracking-wide text-muted-foreground">
+                <span className="text-[9px] font-semibold text-muted-foreground">
                   STATUS
                 </span>
               </div>
