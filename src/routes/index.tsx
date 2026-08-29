@@ -143,7 +143,8 @@ function DocRow({
 
 function Index() {
   return (
-    <main className="min-h-screen bg-background pb-28">
+    <main className="min-h-screen bg-background pb-28 sm:py-6">
+      <div className="mx-auto w-full max-w-md overflow-hidden sm:rounded-[2rem] sm:shadow-card">
       {/* Header */}
       <header className="relative bg-primary pb-20 pt-4">
         <div className="flex items-center px-4">
@@ -185,14 +186,17 @@ function Index() {
               </p>
             </div>
             <button className="shrink-0 rounded-2xl border border-border bg-card p-2 text-center">
-              <img
-                src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=2601100196"
-                alt="Student QR code"
-                loading="lazy"
-                width={76}
-                height={76}
-                className="h-[76px] w-[76px]"
-              />
+              <span className="relative block overflow-hidden rounded-md">
+                <img
+                  src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=2601100196"
+                  alt="Student QR code"
+                  loading="lazy"
+                  width={76}
+                  height={76}
+                  className="h-[76px] w-[76px]"
+                />
+                <span aria-hidden className="qr-scan-line" />
+              </span>
               <span className="mt-1 flex items-center justify-center gap-1 text-[11px] text-muted-foreground">
                 Tap to view full QR <Maximize2 className="h-3 w-3" />
               </span>
