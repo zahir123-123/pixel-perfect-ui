@@ -56,12 +56,15 @@ function InfoField({ label, value }: { label: string; value: string }) {
   );
 }
 
+type DocOption = { name: string; meta: string };
+
 function DocRow({
   icon,
   iconClass,
   title,
   subtitle,
   highlight,
+  options,
   children,
 }: {
   icon: React.ReactNode;
@@ -69,30 +72,72 @@ function DocRow({
   title: string;
   subtitle: string;
   highlight?: boolean;
+  options: DocOption[];
   children?: React.ReactNode;
 }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <button
-      className={`flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left transition-colors ${
-        highlight
-          ? "border-primary/25 bg-primary-soft/60"
-          : "border-border bg-card hover:bg-muted/50"
+    <div
+      className={`overflow-hidden rounded-2xl border transition-colors ${
+        highlight ? "border-primary/25 bg-primary-soft/60" : "border-border bg-card"
       }`}
     >
-      <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${iconClass}`}>
-        {icon}
-      </span>
-      <span className="min-w-0 flex-1">
-        <span
-          className={`block text-[15px] font-semibold ${highlight ? "text-primary" : "text-foreground"}`}
-        >
-          {title}
+      <button
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 px-3 py-3 text-left hover:bg-muted/40"
+      >
+        <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-xl ${iconClass}`}>
+          {icon}
         </span>
-        <span className="block text-[12px] text-muted-foreground">{subtitle}</span>
-        {children}
-      </span>
-      <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground" />
-    </button>
+        <span className="min-w-0 flex-1">
+          <span
+            className={`block text-[15px] font-semibold ${highlight ? "text-primary" : "text-foreground"}`}
+          >
+            {title}
+          </span>
+          <span className="block text-[12px] text-muted-foreground">{subtitle}</span>
+          {children}
+        </span>
+        <ChevronDown
+          className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-300 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      <div
+        className={`grid transition-all duration-300 ease-in-out ${
+          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <ul className="space-y-1.5 border-t border-border/60 px-3 py-2.5">
+            {options.map((opt) => (
+              <li
+                key={opt.name}
+                className="flex items-center gap-2.5 rounded-xl bg-muted/50 px-2.5 py-2"
+              >
+                <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[13px] font-medium text-foreground">
+                    {opt.name}
+                  </span>
+                  <span className="block text-[11px] text-muted-foreground">{opt.meta}</span>
+                </span>
+                <button
+                  aria-label={`Download ${opt.name}`}
+                  className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground transition-transform active:scale-95"
+                >
+                  <Download className="h-4 w-4" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 }
 
