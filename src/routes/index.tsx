@@ -110,7 +110,7 @@ function Index() {
         </div>
       </header>
 
-      <div className="-mt-20 space-y-4 px-4">
+      <div className="relative z-10 -mt-20 space-y-4 px-4">
         {/* Identity card */}
         <section className="rounded-3xl bg-card p-4 shadow-card">
           <div className="flex items-start gap-4">
@@ -135,14 +135,14 @@ function Index() {
                 F.Y.B.COM (NEP) &nbsp;•&nbsp; Roll 0021
               </p>
             </div>
-            <button className="hidden shrink-0 rounded-2xl border border-border bg-card p-2 text-center sm:block">
+            <button className="shrink-0 rounded-2xl border border-border bg-card p-2 text-center">
               <img
                 src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=2601100196"
                 alt="Student QR code"
                 loading="lazy"
-                width={104}
-                height={104}
-                className="h-[104px] w-[104px]"
+                width={92}
+                height={92}
+                className="h-[92px] w-[92px]"
               />
               <span className="mt-1 flex items-center justify-center gap-1 text-[11px] text-muted-foreground">
                 Tap to view full QR <Maximize2 className="h-3 w-3" />
@@ -150,19 +150,7 @@ function Index() {
             </button>
           </div>
 
-          <button className="mt-3 flex w-full items-center justify-between rounded-2xl border border-border p-3 sm:hidden">
-            <img
-              src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=2601100196"
-              alt="Student QR code"
-              loading="lazy"
-              width={88}
-              height={88}
-              className="h-[88px] w-[88px]"
-            />
-            <span className="flex items-center gap-1 pr-1 text-[12px] text-muted-foreground">
-              Tap to view full QR <Maximize2 className="h-3.5 w-3.5" />
-            </span>
-          </button>
+          
 
           <div className="mt-4 grid grid-cols-3 gap-2">
             {[
