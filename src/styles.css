@@ -164,3 +164,39 @@
     color: var(--color-foreground);
   }
 }
+
+/* Horizontal scanner line sweeping across the QR code */
+@keyframes qr-scan {
+  0% {
+    top: 6%;
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    top: 88%;
+    opacity: 0;
+  }
+}
+
+.qr-scan-line {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-destructive) 20%,
+    var(--color-destructive) 80%,
+    transparent
+  );
+  box-shadow: 0 0 6px 1px color-mix(in oklab, var(--color-destructive) 70%, transparent);
+  animation: qr-scan 2.2s ease-in-out infinite;
+  pointer-events: none;
+}
