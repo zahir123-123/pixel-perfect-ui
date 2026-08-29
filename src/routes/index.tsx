@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   ArrowLeft,
   Calendar,
@@ -9,6 +10,7 @@ import {
   BadgeCheck,
   School,
   ChevronRight,
+  ChevronDown,
   ClipboardCopy,
   ReceiptText,
   CreditCard,
@@ -20,6 +22,8 @@ import {
   Wallet,
   BookOpen,
   Maximize2,
+  Download,
+  FileText,
 } from "lucide-react";
 import avatar from "@/assets/student-avatar.jpg";
 
