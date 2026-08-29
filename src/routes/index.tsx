@@ -163,42 +163,42 @@ function Index() {
       <div className="relative z-10 -mt-14 space-y-4 px-4">
         {/* Identity card */}
         <section className="rounded-3xl bg-card p-4 shadow-card">
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-3">
             <img
               src={avatar}
               alt="Portrait of Kadali Chetan Kiran"
               width={512}
               height={512}
-              className="h-[72px] w-[72px] shrink-0 rounded-full border-4 border-primary-soft object-cover"
+              className="h-[64px] w-[64px] shrink-0 rounded-full border-4 border-primary-soft object-cover"
             />
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
-                <span className="rounded-md bg-primary-soft px-2 py-0.5 text-[9px] font-bold text-primary">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="rounded-md bg-primary-soft px-1.5 py-0.5 text-[9px] font-bold text-primary">
                   MEMBER ID
                 </span>
-                <span className="text-[13px] font-semibold text-foreground">2601100196</span>
+                <span className="text-[12.5px] font-semibold text-foreground">2601100196</span>
               </div>
-              <h2 className="mt-1 text-[17px] font-extrabold leading-tight text-foreground">
+              <h2 className="mt-1 text-[15px] font-extrabold leading-tight text-foreground">
                 KADALI CHETAN KIRAN
               </h2>
-              <p className="mt-1 text-[14px] text-muted-foreground">
+              <p className="mt-1 text-[12.5px] text-muted-foreground">
                 F.Y.B.COM (NEP) &nbsp;•&nbsp; Roll 0021
               </p>
             </div>
-            <button className="shrink-0 rounded-2xl border border-border bg-card p-2 text-center">
+            <button className="shrink-0 rounded-2xl border border-border bg-card p-1.5 text-center">
               <span className="relative block overflow-hidden rounded-md">
                 <img
                   src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=2601100196"
                   alt="Student QR code"
                   loading="lazy"
-                  width={76}
-                  height={76}
-                  className="h-[76px] w-[76px]"
+                  width={72}
+                  height={72}
+                  className="h-[72px] w-[72px]"
                 />
                 <span aria-hidden className="qr-scan-line" />
               </span>
-              <span className="mt-1 flex items-center justify-center gap-1 text-[11px] text-muted-foreground">
-                Tap to view full QR <Maximize2 className="h-3 w-3" />
+              <span className="mt-1 flex items-center justify-center gap-1 text-[10px] text-muted-foreground">
+                View full QR <Maximize2 className="h-3 w-3" />
               </span>
             </button>
           </div>
