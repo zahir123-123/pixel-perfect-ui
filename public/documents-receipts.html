@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Documents &amp; Receipts</title>
+<style>
+  :root{
+    --background:#f4f5f8;
+    --foreground:#1c2033;
+    --card:#ffffff;
+    --muted:#f5f6f9;
+    --muted-foreground:#767c8e;
+    --border:#e6e8ee;
+    --primary:#3535d4;
+    --primary-foreground:#fafaff;
+    --primary-soft:#e6e7fb;
+    --success:#128a5b;
+    --success-soft:#dcf5e8;
+    --danger:#e0413a;
+    --danger-soft:#fbe3e2;
+    --warning:#c98212;
+    --warning-soft:#fbeed6;
+    --violet:#7d2fc4;
+    --violet-soft:#f0e3fb;
+    --shadow-card:0 1px 2px rgba(20,22,40,.05),0 6px 18px rgba(20,22,40,.06);
+  }
+  *{box-sizing:border-box;border-color:var(--border)}
+  html,body{margin:0}
+  body{
+    background:var(--background);color:var(--foreground);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:16px 0;
+  }
+  .wrap{width:100%;max-width:448px;margin:0 auto;padding:0 16px}
+  .panel{background:var(--card);border-radius:24px;padding:16px;box-shadow:var(--shadow-card)}
+  .panel h3{margin:0 0 12px;font-size:16px;font-weight:700}
+  .rows{display:flex;flex-direction:column;gap:8px}
+
+  .doc{border:1px solid var(--border);background:var(--card);border-radius:16px;overflow:hidden;transition:border-color .2s}
+  .doc.highlight{border-color:rgba(53,53,212,.25);background:rgba(230,231,251,.6)}
+  .doc-head{
+    display:flex;align-items:center;gap:12px;width:100%;
+    padding:12px;border:0;background:transparent;text-align:left;cursor:pointer;font:inherit;color:inherit;
+  }
+  .doc-head:hover{background:rgba(245,246,249,.7)}
+  .ico{display:grid;place-items:center;width:36px;height:36px;flex:0 0 auto;border-radius:12px}
+  .ico svg{width:18px;height:18px}
+  .doc-text{min-width:0;flex:1}
+  .doc-title{display:block;font-size:15px;font-weight:600;line-height:1.25}
+  .doc.highlight .doc-title{color:var(--primary)}
+  .doc-sub{display:block;margin-top:2px;font-size:12px;color:var(--muted-foreground);line-height:1.35}
+  .chev{width:20px;height:20px;flex:0 0 auto;color:var(--muted-foreground);transition:transform .3s}
+  .doc.open .chev{transform:rotate(180deg)}
+
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .tag{border-radius:6px;padding:2px 8px;font-size:11px;font-weight:500}
+  .t-success{background:var(--success-soft);color:var(--success)}
+  .t-failed{background:var(--danger-soft);color:var(--danger)}
+  .t-refund{background:var(--primary-soft);color:var(--primary)}
+  .t-pending{background:var(--warning-soft);color:var(--warning)}
+
+  .panel-body{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .3s ease,opacity .3s ease}
+  .doc.open .panel-body{grid-template-rows:1fr;opacity:1}
+  .panel-body>div{min-height:0;overflow:hidden}
+  .opts{list-style:none;margin:0;padding:10px 12px;border-top:1px solid rgba(230,232,238,.7);display:flex;flex-direction:column;gap:6px}
+  .opt{display:flex;align-items:center;gap:10px;background:rgba(245,246,249,.9);border-radius:12px;padding:8px 10px}
+  .opt>.file{width:16px;height:16px;flex:0 0 auto;color:var(--muted-foreground)}
+  .opt-text{min-width:0;flex:1}
+  .opt-name{display:block;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .opt-meta{display:block;font-size:11px;color:var(--muted-foreground)}
+  .opt.done{background:var(--success-soft)}
+  .opt.done .opt-meta{color:var(--success);font-weight:500}
+
+  .dl{
+    display:grid;place-items:center;width:32px;height:32px;flex:0 0 auto;
+    border:0;border-radius:10px;background:var(--primary);color:var(--primary-foreground);cursor:pointer;
+    transition:transform .1s,background .2s;
+  }
+  .dl:active{transform:scale(.95)}
+  .dl[disabled]{cursor:default;opacity:.9}
+  .dl svg{width:16px;height:16px}
+  .dl.loading{background:var(--muted-foreground)}
+  .dl.success{background:var(--success)}
+  .spin{animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="panel">
+      <h3>Documents &amp; Receipts</h3>
+      <div class="rows" id="rows"></div>
+    </section>
+  </div>
+
+<script>
+  const I = {
+    clipboard:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2h-2"/><path d="M4 12V6a2 2 0 0 1 2-2h2"/><path d="M4 16h4"/></svg>',
+    receipt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l3-2 3 2 3-2 3 2 3-2V2l-3 2-3-2-3 2-3-2z"/><path d="M8 8h8"/><path d="M8 12h6"/></svg>',
+    card:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>',
+    chev:'<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
+    file:'<svg class="file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
+    download:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>',
+    loader:'<svg class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>',
+    check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+  };
+
+  const DATA = [
+    {
+      icon:I.clipboard, iconBg:'var(--violet-soft)', iconColor:'var(--violet)',
+      title:'Admission Forms',
+      subtitle:'Download submitted admission forms for all classes',
+      options:[
+        {name:'F.Y.B.COM Admission Form 2026-27', meta:'PDF • 1.2 MB'},
+        {name:'Eligibility Form', meta:'PDF • 480 KB'},
+        {name:'Anti-Ragging Undertaking', meta:'PDF • 210 KB'}
+      ]
+    },
+    {
+      icon:I.receipt, iconBg:'var(--success-soft)', iconColor:'var(--success)',
+      title:'Institute Receipts',
+      subtitle:'Download receipts for admission, fees, fines, exam & more',
+      options:[
+        {name:'Admission Fee Receipt', meta:'Receipt #RC-1042 • PDF'},
+        {name:'Tuition Fee Receipt — Term 1', meta:'Receipt #RC-1187 • PDF'},
+        {name:'Exam Form Fee Receipt', meta:'Receipt #RC-1290 • PDF'}
+      ]
+    },
+    {
+      icon:I.card, iconBg:'var(--primary)', iconColor:'var(--primary-foreground)',
+      title:'Payment Acknowledgements',
+      subtitle:'View and download online payment acknowledgements',
+      highlight:true,
+      tags:[['Success','t-success'],['Failed','t-failed'],['Refunded','t-refund'],['Pending','t-pending']],
+      options:[
+        {name:'Online Payment — TXN903412', meta:'Success • 12 Aug 2026'},
+        {name:'Online Payment — TXN903508', meta:'Failed • 12 Aug 2026'},
+        {name:'Refund Acknowledgement — RF102', meta:'Refunded • 15 Aug 2026'}
+      ]
+    }
+  ];
+
+  const rows = document.getElementById('rows');
+
+  DATA.forEach((d) => {
+    const card = document.createElement('div');
+    card.className = 'doc' + (d.highlight ? ' highlight' : '');
+    card.innerHTML = `
+      <button class="doc-head" aria-expanded="false">
+        <span class="ico" style="background:${d.iconBg};color:${d.iconColor}">${d.icon}</span>
+        <span class="doc-text">
+          <span class="doc-title">${d.title}</span>
+          <span class="doc-sub">${d.subtitle}</span>
+          ${d.tags ? `<span class="tags">${d.tags.map(([t,c])=>`<span class="tag ${c}">${t}</span>`).join('')}</span>` : ''}
+        </span>
+        ${I.chev}
+      </button>
+      <div class="panel-body">
+        <div>
+          <ul class="opts">
+            ${d.options.map(o=>`
+              <li class="opt">
+                ${I.file}
+                <span class="opt-text">
+                  <span class="opt-name">${o.name}</span>
+                  <span class="opt-meta" data-meta>${o.meta}</span>
+                </span>
+                <button class="dl" aria-label="Download ${o.name}">${I.download}</button>
+              </li>`).join('')}
+          </ul>
+        </div>
+      </div>`;
+    rows.appendChild(card);
+
+    const head = card.querySelector('.doc-head');
+    head.addEventListener('click', () => {
+      const open = card.classList.toggle('open');
+      head.setAttribute('aria-expanded', String(open));
+    });
+
+    card.querySelectorAll('.dl').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        const li = btn.closest('.opt');
+        const meta = li.querySelector('[data-meta]');
+        const original = meta.textContent;
+        btn.disabled = true;
+        btn.classList.add('loading');
+        btn.innerHTML = I.loader;
+        meta.textContent = 'Downloading…';
+
+        setTimeout(() => {
+          btn.classList.remove('loading');
+          btn.classList.add('success');
+          btn.innerHTML = I.check;
+          li.classList.add('done');
+          meta.textContent = 'Downloaded successfully';
+
+          setTimeout(() => {
+            btn.classList.remove('success');
+            btn.innerHTML = I.download;
+            btn.disabled = false;
+            li.classList.remove('done');
+            meta.textContent = original;
+          }, 2600);
+        }, 1600);
+      });
+    });
+  });
+</script>
+</body>
+</html>
