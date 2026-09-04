@@ -45,14 +45,15 @@
     padding:12px;border:0;background:transparent;text-align:left;cursor:pointer;font:inherit;color:inherit;
   }
   .doc-head:hover{background:rgba(245,246,249,.7)}
-  .ico{display:grid;place-items:center;width:36px;height:36px;flex:0 0 auto;border-radius:12px}
-  .ico svg{width:18px;height:18px}
+  .ico{display:grid;place-items:center;width:44px;height:44px;flex:0 0 auto;border-radius:14px;color:#fff}
+  .ico svg{width:20px;height:20px}
   .doc-text{min-width:0;flex:1}
-  .doc-title{display:block;font-size:15px;font-weight:600;line-height:1.25}
+  .doc-title{display:block;font-size:16px;font-weight:700;line-height:1.25}
   .doc.highlight .doc-title{color:var(--primary)}
-  .doc-sub{display:block;margin-top:2px;font-size:12px;color:var(--muted-foreground);line-height:1.35}
-  .chev{width:20px;height:20px;flex:0 0 auto;color:var(--muted-foreground);transition:transform .3s}
-  .doc.open .chev{transform:rotate(180deg)}
+  .doc-sub{display:block;margin-top:2px;font-size:12.5px;color:#7b86a8;line-height:1.35}
+  .chev-wrap{display:grid;place-items:center;width:34px;height:34px;flex:0 0 auto;border-radius:50%;background:var(--violet-soft);color:var(--violet);transition:transform .3s}
+  .doc.open .chev-wrap{transform:rotate(180deg)}
+  .chev{width:18px;height:18px}
 
   .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .tag{border-radius:6px;padding:2px 8px;font-size:11px;font-weight:500}
@@ -65,24 +66,25 @@
   .doc.open .panel-body{grid-template-rows:1fr;opacity:1}
   .panel-body>div{min-height:0;overflow:hidden}
   .opts{list-style:none;margin:0;padding:10px 12px;border-top:1px solid rgba(230,232,238,.7);display:flex;flex-direction:column;gap:6px}
-  .opt{display:flex;align-items:center;gap:10px;background:rgba(245,246,249,.9);border-radius:12px;padding:8px 10px}
-  .opt>.file{width:16px;height:16px;flex:0 0 auto;color:var(--muted-foreground)}
+  .opt{display:flex;align-items:center;gap:10px;background:#f4f5f9;border-radius:14px;padding:10px 12px}
+  .opt>.file{width:20px;height:20px;flex:0 0 auto;color:#9aa2b8}
   .opt-text{min-width:0;flex:1}
-  .opt-name{display:block;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .opt-name{display:block;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .opt-meta{display:block;font-size:11px;color:var(--muted-foreground)}
   .opt.done{background:var(--success-soft)}
   .opt.done .opt-meta{color:var(--success);font-weight:500}
 
   .dl{
-    display:grid;place-items:center;width:32px;height:32px;flex:0 0 auto;
-    border:0;border-radius:10px;background:var(--primary);color:var(--primary-foreground);cursor:pointer;
+    display:grid;place-items:center;width:38px;height:38px;flex:0 0 auto;
+    border:0;border-radius:50%;background:linear-gradient(145deg,#2f6df6,#1d4fd8);color:#fff;
+    box-shadow:0 4px 10px rgba(37,99,235,.35);cursor:pointer;
     transition:transform .1s,background .2s;
   }
   .dl:active{transform:scale(.95)}
   .dl[disabled]{cursor:default;opacity:.9}
-  .dl svg{width:16px;height:16px}
-  .dl.loading{background:var(--muted-foreground)}
-  .dl.success{background:var(--success)}
+  .dl svg{width:18px;height:18px}
+  .dl.loading{background:#9aa2b8;box-shadow:none}
+  .dl.success{background:var(--success);box-shadow:0 4px 10px rgba(18,138,91,.3)}
   .spin{animation:spin .8s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
 </style>
@@ -97,19 +99,19 @@
 
 <script>
   const I = {
-    clipboard:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2h-2"/><path d="M4 12V6a2 2 0 0 1 2-2h2"/><path d="M4 16h4"/></svg>',
+    clipboard:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M15.5 11.5 11 16l-2.2.6.6-2.2 4.5-4.5a1.2 1.2 0 0 1 1.7 1.6z"/></svg>',
     receipt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l3-2 3 2 3-2 3 2 3-2V2l-3 2-3-2-3 2-3-2z"/><path d="M8 8h8"/><path d="M8 12h6"/></svg>',
     card:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>',
     chev:'<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
     file:'<svg class="file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
-    download:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>',
+    download:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>',
     loader:'<svg class="spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>',
     check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
   };
 
   const DATA = [
     {
-      icon:I.clipboard, iconBg:'var(--violet-soft)', iconColor:'var(--violet)',
+      icon:I.clipboard, iconBg:'linear-gradient(145deg,#a855f7,#7c2fc4)', iconColor:'#fff',
       title:'Admission Forms',
       subtitle:'Download submitted admission forms for all classes',
       options:[
@@ -119,7 +121,7 @@
       ]
     },
     {
-      icon:I.receipt, iconBg:'var(--success-soft)', iconColor:'var(--success)',
+      icon:I.receipt, iconBg:'linear-gradient(145deg,#22c07f,#0f8a5b)', iconColor:'#fff',
       title:'Institute Receipts',
       subtitle:'Download receipts for admission, fees, fines, exam & more',
       options:[
@@ -129,7 +131,7 @@
       ]
     },
     {
-      icon:I.card, iconBg:'var(--primary)', iconColor:'var(--primary-foreground)',
+      icon:I.card, iconBg:'linear-gradient(145deg,#4f6bf6,#2536c9)', iconColor:'#fff',
       title:'Payment Acknowledgements',
       subtitle:'View and download online payment acknowledgements',
       highlight:true,
@@ -155,7 +157,7 @@
           <span class="doc-sub">${d.subtitle}</span>
           ${d.tags ? `<span class="tags">${d.tags.map(([t,c])=>`<span class="tag ${c}">${t}</span>`).join('')}</span>` : ''}
         </span>
-        ${I.chev}
+        <span class="chev-wrap">${I.chev}</span>
       </button>
       <div class="panel-body">
         <div>
