@@ -250,7 +250,11 @@ function Index() {
           />
 
           <div className="relative flex items-center justify-between">
-            <button aria-label="Open menu" className="text-primary-foreground">
+            <button
+              aria-label="Open menu"
+              onClick={() => setDrawerOpen(true)}
+              className="text-primary-foreground"
+            >
               <Menu className="h-7 w-7" />
             </button>
             <h1 className="text-[19px] font-bold text-primary-foreground">Student Profile</h1>
