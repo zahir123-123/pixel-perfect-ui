@@ -32,6 +32,7 @@ import {
   Landmark,
 } from "lucide-react";
 import avatar from "@/assets/student-avatar.jpg";
+import { SideDrawer } from "@/components/SideDrawer";
 import campus from "@/assets/campus-illustration.jpg";
 
 export const Route = createFileRoute("/")({
@@ -232,8 +233,10 @@ function DocRow({
 /* ---------- page ---------- */
 
 function Index() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
   return (
     <main className="min-h-screen bg-background pb-28 sm:py-6">
+      <SideDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
       <div className="mx-auto w-full max-w-md overflow-hidden sm:rounded-[2rem] sm:shadow-card">
         {/* Header */}
         <header className="relative overflow-hidden bg-primary px-4 pb-16 pt-4">
